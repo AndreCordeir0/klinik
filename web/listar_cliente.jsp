@@ -11,6 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
+       
 
         <title>KLINIK | ${titulo}</title>
 
@@ -23,7 +24,7 @@
 
         <!-- Custom styles for this page -->
         <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+        
     </head>
 
     <body id="page-top">
@@ -65,25 +66,39 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Nome</th>
-                                                <th>Perfil</th>
                                                 <th>Email</th>
-                                                <th>Status</th>
+                                                <th>CPF</th>
+                                                <th class="text-center">Status</th>
                                                 <th class="text-right">Ação</th>
                                             </tr>
                                         </thead>
+                                        <jsp:useBean class="model.ClienteDAO" id="cDAO" />
                                         <tbody>
+                                             <c:forEach var="c" items="${cDAO.lista}">
                                             <tr>
-                                                <td>0</td>
-                                                <td>Zero Badarass</td>
-                                                <td>ADEMIRO</td>
-                                                <td>ademiro@ademoro.com</td>
-                                                <td>ATIVO</td>
+                                                
+                                                <td>${c.idCliente}</td>
+                                                <td>${c.nome}</td>
+                                                <td>${c.email}</td>
+                                                <td>${c.cpf}</td>
+                                                <td class="text-center">
+                                                        <c:if test="${c.status == 1}">
+                                                            <span class="btn badge badge-primary">ATIVO</span>
+                                                        </c:if>
+                                                        <c:if test="${c.status == 0}">
+                                                            <span class="btn badge badge-secondary">INATIVO</span>
+                                                        </c:if>
+                                                    </td>
                                                 <td  class="text-right">
-                                                    <a title="Editar" href="#" class="btn btn sm btn-primary"> <i class="fas fa-user-edit"></i> </a>
-                                                    <a title="Excluir" href="javascript(void)" data-toggle="modal" data-target="#usuario-${usuario.idUsuario}" class="btn btn sm btn-danger"> <i class="fas fa-user-times"></i> </a>
+                                                    <c:if test="${c.status == 1}">
+                                                        <a title="Cadastrar Consulta" href="form_consulta.jsp?acao=novo&idCliente=${c.idCliente}" class="btn btn sm btn-info"> <i class="fas fa-stethoscope"></i> </a>
+                                                        <a title="Cadastrar Contrato" href="form_contrato.jsp?acao=novo&idCliente=${c.idCliente}" class="btn btn sm btn-dark"> <i class="fas fa-file-signature"></i> </a>
+                                                    </c:if>
+                                                    <a title="Editar" href="gerenciar_cliente.do?acao=alterar&idCliente=${c.idCliente}" class="btn btn sm btn-primary"> <i class="fas fa-user-edit"></i> </a>
+                                                    <a title="Desativar" href="javascript(void)" data-toggle="modal" data-target="#cliente-${c.idCliente}" class="btn btn sm btn-danger"> <i class="fas fa-user-times"></i> </a>
                                                 </td>
                                             </tr>
-                                        <div class="modal fade" id="usuario-${usuario.idUsuario}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="cliente-${c.idCliente}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -92,14 +107,15 @@
                                                             <span aria-hidden="true">×</span>
                                                         </button>
                                                     </div>
-                                                    <div class="modal-body">Você realmente deseja excluir este usuário?</div>
+                                                    <div class="modal-body">Você realmente deseja desativar o Cliente ${c.nome}?</div>
                                                     <div class="modal-footer">
                                                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Não</button>
-                                                        <a class="btn btn-danger" href="gerenciar_aluno.do?acao=deletar&aluno_id=${usuario.idUsuario}">Sim</a>
+                                                        <a class="btn btn-danger" href="gerenciar_cliente.do?acao=deletar&idCliente=${c.idCliente}">Sim</a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                             </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>

@@ -1,7 +1,14 @@
+<%-- 
+    Document   : listar_servico
+    Created on : 27/11/2021, 01:39:47
+    Author     : COUGAR
+--%>
+
 <%@page import="java.time.LocalDate"%>
 <%@page import="model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,8 +63,8 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary float-left pt-1">Usuários Cadastrados</h6>
-                                <a href="gerenciar_usuarios.do?acao=cadastrar" class="btn btn-success btn-sm float-right" ><i class="fas fa-user-plus"></i>&nbsp;Novo</a>
+                                <h6 class="m-0 font-weight-bold text-primary float-left pt-1">Serviços Cadastrados</h6>
+                                <a href="gerenciar_servico.do?acao=cadastrar" class="btn btn-success btn-sm float-right" ><i class="far fa-plus-square"></i>&nbsp;Novo</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -66,49 +73,49 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Nome</th>
-                                                <th>Perfil</th>
-                                                <th>Login</th>
+                                                <th>Quantidade</th>
+                                                <th>Valor</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-right">Ação</th>
                                             </tr>
                                         </thead>
                                         
-                                        <jsp:useBean class="model.UsuarioDAO" id="uDAO" />
+                                        <jsp:useBean class="model.ServicoDAO" id="servicoDAO" />
                                         <tbody>
                                             
-                                            <c:forEach var="usuario" items="${uDAO.lista}">
+                                            <c:forEach var="servico" items="${servicoDAO.lista}">
                                                 <tr>
-                                                    <td>${usuario.idUsuario}</td>
-                                                    <td>${usuario.nome}</td>
-                                                    <td>${usuario.idPerfil.nome}</td> 
-                                                    <td>${usuario.login}</td>
+                                                    <td>${servico.idServico}</td>
+                                                    <td>${servico.nome}</td>
+                                                    <td>${servico.quantidade}</td>
+                                                    <td>R$ <fmt:formatNumber pattern="#,##0.00" value="${servico.valor}"></fmt:formatNumber></td>
                                                     <td class="text-center">
-                                                        <c:if test="${usuario.status == 1}">
+                                                        <c:if test="${servico.status == 1}">
                                                             <span class="btn badge badge-primary">ATIVO</span>
                                                         </c:if>
-                                                        <c:if test="${usuario.status == 0}">
+                                                        <c:if test="${servico.status == 0}">
                                                             <span class="btn badge badge-secondary">INATIVO</span>
                                                         </c:if>
                                                     </td>
                                                     <td  class="text-right">
-                                                        <a title="Editar" href="gerenciar_usuarios.do?acao=alterar&idUsuario=${usuario.idUsuario}" class="btn btn sm btn-primary"> <i class="fas fa-user-edit"></i> </a>
-                                                        <a title="Excluir" href="javascript(void)" data-toggle="modal" data-target="#usuario-${usuario.idUsuario}" class="btn btn sm btn-danger"> <i class="fas fa-user-times"></i> </a>
+                                                        <a title="Editar" href="gerenciar_servico.do?acao=alterar&idServico=${servico.idServico}" class="btn btn sm btn-primary"> <i class="fas fa-edit"></i> </a>
+                                                        <a title="Excluir" href="javascript(void)" data-toggle="modal" data-target="#servico-${servico.idServico}" class="btn btn sm btn-danger"> <i class="fas fa-trash-alt"></i> </a>
                                                     </td>
                                                 </tr>
                                             
-                                                <div class="modal fade" id="usuario-${usuario.idUsuario}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="servico-${servico.idServico}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Tem certeza que deseja deletar?</h5>
+                                                                <h5 class="modal-title" id="exampleModalLabel">Tem certeza que deseja desativar?</h5>
                                                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">×</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">Você realmente deseja desativar o usuário ${usuario.nome}?</div>
+                                                            <div class="modal-body">Você realmente deseja desativar o serviço ${servico.nome}?</div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Não</button>
-                                                                <a class="btn btn-danger" href="gerenciar_usuarios.do?acao=deletar&idUsuario=${usuario.idUsuario}">Sim</a>
+                                                                <a class="btn btn-danger" href="gerenciar_servico.do?acao=deletar&idServico=${servico.idServico}">Sim</a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -182,3 +189,5 @@
     </body>
 
 </html>
+
+

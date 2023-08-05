@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="java.time.LocalDate"%>
 <%@page import="model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -56,8 +57,7 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary float-left pt-1">Usuários Cadastrados</h6>
-                                <a href="gerenciar_usuarios.do?acao=cadastrar" class="btn btn-success btn-sm float-right" ><i class="fas fa-user-plus"></i>&nbsp;Novo</a>
+                                <h6 class="m-0 font-weight-bold text-primary float-left pt-1">Contratos Cadastrados</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -65,38 +65,43 @@
                                         <thead class="text-primary">
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Nome</th>
-                                                <th>Perfil</th>
-                                                <th>Login</th>
+                                                <th>Atendente</th>
+                                                <th>Cliente</th>
+                                                <th>Data Contrato</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-right">Ação</th>
                                             </tr>
                                         </thead>
                                         
-                                        <jsp:useBean class="model.UsuarioDAO" id="uDAO" />
+                                        <jsp:useBean class="model.ContratoDAO" id="conDAO" />
                                         <tbody>
                                             
-                                            <c:forEach var="usuario" items="${uDAO.lista}">
+                                            <c:forEach var="contrato" items="${conDAO.lista}">
                                                 <tr>
-                                                    <td>${usuario.idUsuario}</td>
-                                                    <td>${usuario.nome}</td>
-                                                    <td>${usuario.idPerfil.nome}</td> 
-                                                    <td>${usuario.login}</td>
+                                                    <td>${contrato.idContrato}</td>
+                                                    <td>${contrato.atendente.nome}</td>
+                                                    <td>${contrato.idCliente.nome}</td>
+                                                    <td>
+                                                        <fmt:formatDate value="${contrato.data_contrato}" pattern="dd/MM/yyyy 'às' HH:mm" />
+                                                    </td>
                                                     <td class="text-center">
-                                                        <c:if test="${usuario.status == 1}">
-                                                            <span class="btn badge badge-primary">ATIVO</span>
+                                                        <c:if test="${contrato.status == 'finalizado'}">
+                                                            <span class="btn badge badge-success">Finalizado</span>
                                                         </c:if>
-                                                        <c:if test="${usuario.status == 0}">
-                                                            <span class="btn badge badge-secondary">INATIVO</span>
+                                                        <c:if test="${contrato.status == 'aberto'}">
+                                                            <span class="btn badge badge-warning">Em Aberto</span>
+                                                        </c:if>
+                                                        <c:if test="${contrato.status == 'cancelado'}">
+                                                            <span class="btn badge badge-danger">Cancelado</span>
                                                         </c:if>
                                                     </td>
                                                     <td  class="text-right">
-                                                        <a title="Editar" href="gerenciar_usuarios.do?acao=alterar&idUsuario=${usuario.idUsuario}" class="btn btn sm btn-primary"> <i class="fas fa-user-edit"></i> </a>
-                                                        <a title="Excluir" href="javascript(void)" data-toggle="modal" data-target="#usuario-${usuario.idUsuario}" class="btn btn sm btn-danger"> <i class="fas fa-user-times"></i> </a>
+                                                        <a title="Editar" href="gerenciar_contrato.do?acao=alterar&idContrato=${contrato.idContrato}" class="btn btn sm btn-primary"> <i class="fas fa-edit"></i> </a>
+                                                        <a title="Excluir" href="javascript(void)" data-toggle="modal" data-target="#contrato-${contrato.idContrato}" class="btn btn sm btn-danger"> <i class="fas fa-trash-alt"></i> </a>
                                                     </td>
                                                 </tr>
                                             
-                                                <div class="modal fade" id="usuario-${usuario.idUsuario}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="contrato-${contrato.idContrato}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -105,10 +110,10 @@
                                                                     <span aria-hidden="true">×</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">Você realmente deseja desativar o usuário ${usuario.nome}?</div>
+                                                            <div class="modal-body">Você realmente deseja excluir o contrato ${contrato.idContrato}?</div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Não</button>
-                                                                <a class="btn btn-danger" href="gerenciar_usuarios.do?acao=deletar&idUsuario=${usuario.idUsuario}">Sim</a>
+                                                                <a class="btn btn-danger" href="gerenciar_contrato.do?acao=deletar&idContrato=${contrato.idContrato}">Sim</a>
                                                             </div>
                                                         </div>
                                                     </div>

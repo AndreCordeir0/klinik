@@ -56,8 +56,8 @@
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary float-left pt-1">Usuários Cadastrados</h6>
-                                <a href="gerenciar_usuarios.do?acao=cadastrar" class="btn btn-success btn-sm float-right" ><i class="fas fa-user-plus"></i>&nbsp;Novo</a>
+                                <h6 class="m-0 font-weight-bold text-primary float-left pt-1">Perfis Cadastrados</h6>
+                                <a href="gerenciar_perfil.do?acao=cadastrar" class="btn btn-success btn-sm float-right" ><i class="fas fa-user-plus"></i>&nbsp;Novo</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -66,37 +66,25 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Nome</th>
-                                                <th>Perfil</th>
-                                                <th>Login</th>
-                                                <th class="text-center">Status</th>
                                                 <th class="text-right">Ação</th>
                                             </tr>
                                         </thead>
                                         
-                                        <jsp:useBean class="model.UsuarioDAO" id="uDAO" />
+                                        <jsp:useBean class="model.PerfilDAO" id="pDAO" />
                                         <tbody>
                                             
-                                            <c:forEach var="usuario" items="${uDAO.lista}">
+                                            <c:forEach var="perfil" items="${pDAO.lista}">
                                                 <tr>
-                                                    <td>${usuario.idUsuario}</td>
-                                                    <td>${usuario.nome}</td>
-                                                    <td>${usuario.idPerfil.nome}</td> 
-                                                    <td>${usuario.login}</td>
-                                                    <td class="text-center">
-                                                        <c:if test="${usuario.status == 1}">
-                                                            <span class="btn badge badge-primary">ATIVO</span>
-                                                        </c:if>
-                                                        <c:if test="${usuario.status == 0}">
-                                                            <span class="btn badge badge-secondary">INATIVO</span>
-                                                        </c:if>
-                                                    </td>
+                                                    <td>${perfil.idPerfil}</td>
+                                                    <td>${perfil.nome}</td>
                                                     <td  class="text-right">
-                                                        <a title="Editar" href="gerenciar_usuarios.do?acao=alterar&idUsuario=${usuario.idUsuario}" class="btn btn sm btn-primary"> <i class="fas fa-user-edit"></i> </a>
-                                                        <a title="Excluir" href="javascript(void)" data-toggle="modal" data-target="#usuario-${usuario.idUsuario}" class="btn btn sm btn-danger"> <i class="fas fa-user-times"></i> </a>
+                                                        <a title="Gerenciar Menus" href="gerenciar_menu_perfil.do?acao=gerenciar&idPerfil=${perfil.idPerfil}" class="btn btn sm btn-dark"> <i class="fas fa-tasks"></i> </a>
+                                                        <a title="Editar" href="gerenciar_perfil.do?acao=alterar&idPerfil=${perfil.idPerfil}" class="btn btn sm btn-primary"> <i class="fas fa-user-edit"></i> </a>
+                                                        <a title="Excluir" href="javascript(void)" data-toggle="modal" data-target="#perfil-${perfil.idPerfil}" class="btn btn sm btn-danger"> <i class="fas fa-user-times"></i> </a>
                                                     </td>
                                                 </tr>
                                             
-                                                <div class="modal fade" id="usuario-${usuario.idUsuario}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="perfil-${perfil.idPerfil}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -105,10 +93,10 @@
                                                                     <span aria-hidden="true">×</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">Você realmente deseja desativar o usuário ${usuario.nome}?</div>
+                                                            <div class="modal-body">Você realmente deseja deletar o Perfil ${perfil.nome}?</div>
                                                             <div class="modal-footer">
                                                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Não</button>
-                                                                <a class="btn btn-danger" href="gerenciar_usuarios.do?acao=deletar&idUsuario=${usuario.idUsuario}">Sim</a>
+                                                                <a class="btn btn-danger" href="gerenciar_perfil.do?acao=deletar&idPerfil=${perfil.idPerfil}">Sim</a>
                                                             </div>
                                                         </div>
                                                     </div>
